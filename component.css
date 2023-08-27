@@ -1,0 +1,15 @@
+legend {
+	color: yellow;
+	font-weight: 400;
+}
+
+button,
+input,
+select {
+	font-family: 'Poppins', sans-serif;
+	font-weight: 200;
+}
+
+fieldset {
+	border-color: yellow;
+}

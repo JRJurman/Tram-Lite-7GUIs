@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;700&display=swap" rel="stylesheet" />
+
+		<style>
+			:root {
+				color-scheme: dark light;
+			}
+			body {
+				font-family: 'Poppins', sans-serif;
+				font-weight: 200;
+				max-width: 500px;
+				margin: auto;
+			}
+
+			header {
+				display: flex;
+				align-items: center;
+			}
+
+			main * {
+				display: block;
+				margin-bottom: 1em;
+			}
+		</style>
+
+		<script src="https://unpkg.com/tram-lite@3.0.0-beta.1/src/tram-lite.js"></script>
+
+		<script src="./gui-counter.js"></script>
+		<script src="./gui-temp-converter.js"></script>
+		<script src="./gui-flight-booker.js"></script>
+		<script src="./gui-timer.js"></script>
+		<script src="./gui-crud.js"></script>
+		<script src="./context-menu-container.js"></script>
+		<script src="./gui-circle-drawer.js"></script>
+
+		<title>Tram-Lite - 7GUIs</title>
+
+		<link rel="icon" type="image/png" href="https://unpkg.com/@tram-one/tram-logo@5.0.1/dist/lite_32.png" />
+	</head>
+	<body>
+		<header>
+			<img src="https://unpkg.com/@tram-one/tram-logo@5.0.1/dist/lite.svg" width="128px" />
+			<h1>Tram-Lite - 7GUIs</h1>
+		</header>
+		<p>Tram-Lite implementation of the <a href="https://7guis.github.io/7guis/tasks">7GUI</a> tasks.</p>
+		<main>
+			<gui-counter></gui-counter>
+			<gui-temp-converter></gui-temp-converter>
+			<gui-flight-booker></gui-flight-booker>
+			<gui-timer></gui-timer>
+			<gui-crud></gui-crud>
+			<gui-circle-drawer></gui-circle-drawer>
+		</main>
+	</body>
+</html>
