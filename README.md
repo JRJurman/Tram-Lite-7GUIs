@@ -6,7 +6,7 @@
 
 # Live Site
 
-Go to https://jrjurman.com/Tram-Lite-7GUis
+Go to https://jrjurman.com/Tram-Lite-7GUIs/
 
 # Development
 
