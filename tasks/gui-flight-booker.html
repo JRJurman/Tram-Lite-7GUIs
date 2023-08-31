@@ -1,19 +1,19 @@
-define`
+<template is="component-definition">
 	<gui-flight-booker flight-option="one-way" start-date="03/27/2014" return-date="03/27/2014">
 		<link href="./component.css" rel="stylesheet" />
 		<style>
-			fieldset {
+			section {
 				display: flex;
 				flex-direction: column;
-				max-width: 4em;
+				max-width: 10em;
 				gap: 4px;
 			}
 			input[invalid] {
 				background: red;
 			}
 		</style>
-		<fieldset>
-			<legend>Flight Booker</legend>
+
+		<section>
 			<select id="flight-input" onchange="updateRootAttr('flight-option', event)" value=${'flight-option'}>
 				<option value="one-way">one-way flight</option>
 				<option value="return">return flight</option>
@@ -21,13 +21,15 @@ define`
 			<input id="start-input" oninput="updateRootAttr('start-date', event)" value=${'start-date'}>
 			<input id="return-input" oninput="updateRootAttr('return-date', event)" value=${'return-date'}>
 			<button id="book-confirm" onclick="bookFlight(this)">Book</button>
-		</fieldset>
+		</section>
+
 		<script>
 			initFlightBooker(this)
 		</script>
 	</gui-flight-booker>
-`;
+</template>
 
+<script>
 function initFlightBooker(flightBooker) {
 	// setup listeners
 	addAttributeListener(flightBooker, ['flight-option', 'start-date', 'return-date'], () =>
@@ -97,3 +99,4 @@ function bookFlight(flightButton) {
 		);
 	}
 }
+</script>

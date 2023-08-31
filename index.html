@@ -6,7 +6,7 @@
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;700&display=swap" rel="stylesheet" />
-
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 		<style>
 			:root {
 				color-scheme: dark light;
@@ -14,48 +14,82 @@
 			body {
 				font-family: 'Poppins', sans-serif;
 				font-weight: 200;
-				max-width: 500px;
 				margin: auto;
+				max-width: 500px;
 			}
 
 			header {
-				display: flex;
-				align-items: center;
+				margin-bottom: 2em;
 			}
 
-			main * {
+			body p, header {
+				text-align: center;
+				margin: auto;
+			}
+
+			body p {
+			}
+
+			header h1 {
+				margin: 0;
+				display: inline-flex;
+    		align-items: center;
+				padding-right: 1.3em;
+			}
+
+			example-frame {
 				display: block;
 				margin-bottom: 1em;
 			}
 		</style>
 
-		<script src="https://unpkg.com/tram-lite@3.0.0-beta.1/src/tram-lite.js"></script>
-
-		<script src="./gui-counter.js"></script>
-		<script src="./gui-temp-converter.js"></script>
-		<script src="./gui-flight-booker.js"></script>
-		<script src="./gui-timer.js"></script>
-		<script src="./gui-crud.js"></script>
-		<script src="./context-menu-container.js"></script>
-		<script src="./gui-circle-drawer.js"></script>
+		<script src="https://unpkg.com/tram-lite@3"></script>
+		<script src="https://unpkg.com/html-import-element@1""></script>
 
 		<title>Tram-Lite - 7GUIs</title>
 
 		<link rel="icon" type="image/png" href="https://unpkg.com/@tram-one/tram-logo@5.0.1/dist/lite_32.png" />
+
+		<html-import src="./components/context-menu-container.html"></html-import>
+		<html-import src="./components/example-frame.html"></html-import>
+		<html-import src="./components/material-icon.html"></html-import>
+
+		<html-import src="./tasks/gui-counter.html"></html-import>
+		<html-import src="./tasks/gui-temp-converter.html"></html-import>
+		<html-import src="./tasks/gui-flight-booker.html"></html-import>
+		<html-import src="./tasks/gui-timer.html"></html-import>
+		<html-import src="./tasks/gui-crud.html"></html-import>
+		<html-import src="./tasks/gui-circle-drawer.html"></html-import>
 	</head>
 	<body>
 		<header>
-			<img src="https://unpkg.com/@tram-one/tram-logo@5.0.1/dist/lite.svg" width="128px" />
-			<h1>Tram-Lite - 7GUIs</h1>
+			<h1>
+				<img src="https://unpkg.com/@tram-one/tram-logo@5.0.1/dist/lite.svg" width="128px" />
+				Tram-Lite - 7GUIs
+			</h1>
+			<p>
+				<a href="https://tram-one.io/tram-lite/">Tram-Lite</a> implementation of the <a href="https://7guis.github.io/7guis/tasks">7GUIs Tasks</a>.
+			</p>
 		</header>
-		<p>Tram-Lite implementation of the <a href="https://7guis.github.io/7guis/tasks">7GUI</a> tasks.</p>
 		<main>
-			<gui-counter></gui-counter>
-			<gui-temp-converter></gui-temp-converter>
-			<gui-flight-booker></gui-flight-booker>
-			<gui-timer></gui-timer>
-			<gui-crud></gui-crud>
-			<gui-circle-drawer></gui-circle-drawer>
+			<example-frame name="Counter" source="tasks/gui-counter.html">
+				<gui-counter></gui-counter>
+			</example-frame>
+			<example-frame name="Temperature Converter" source="tasks/gui-temp-converter.html">
+				<gui-temp-converter></gui-temp-converter>
+			</example-frame>
+			<example-frame name="Flight Booker" source="tasks/gui-flight-booker.html">
+				<gui-flight-booker></gui-flight-booker>
+			</example-frame>
+			<example-frame name="Timer" source="tasks/gui-timer.html">
+				<gui-timer></gui-timer>
+			</example-frame>
+			<example-frame name="CRUD" source="tasks/gui-crud.html">
+				<gui-crud></gui-crud>
+			</example-frame>
+			<example-frame name="Circle Drawer" source="tasks/gui-circle-drawer.html">
+				<gui-circle-drawer></gui-circle-drawer>
+			</example-frame>
 		</main>
 	</body>
 </html>

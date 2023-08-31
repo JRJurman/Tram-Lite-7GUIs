@@ -1,4 +1,4 @@
-define`
+<template is="component-definition">
 	<context-menu-container matches="">
 		<style>
 			menu {
@@ -18,8 +18,9 @@ define`
 			this.dismissContextMenu = () => dismissContextMenu(this.shadowRoot.querySelector('menu'))
 		</script>
 	</context-menu-container>
-`;
+</template>
 
+<script>
 function displayContextMenu(contextMenuSection, event) {
 	const contextMenuShadow = contextMenuSection.getRootNode();
 	const contextMenuContainer = contextMenuShadow.host;
@@ -54,3 +55,4 @@ function dismissContextMenu(contextMenuSection, event) {
 	contextMenuMenu.style.display = 'none';
 	contentWrapper.style.pointerEvents = '';
 }
+</script>

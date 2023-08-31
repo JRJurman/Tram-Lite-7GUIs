@@ -1,19 +1,19 @@
-define`
+<template is="component-definition">
 	<gui-timer elapsed-time="0" max-time="0">
 		<link href="./component.css" rel="stylesheet" />
-		<fieldset>
-			<legend>Timer</legend>
-			Elapsed Time <progress value=${'elapsed-time'} max=${'max-time'}></progress>
-			<div>${'elapsed-time'}s</div>
-			Duration <input oninput="updateRootAttr('max-time', event)" type="range" min="0" max="30" step="0.01" value=${'max-time'}>
-			<button onclick="resetTimer(event)">Reset</button>
-		</fieldset>
+
+		Elapsed Time <progress value=${'elapsed-time'} max=${'max-time'}></progress>
+		<div>${'elapsed-time'}s</div>
+		Duration <input oninput="updateRootAttr('max-time', event)" type="range" min="0" max="30" step="0.01" value=${'max-time'}>
+		<button onclick="resetTimer(event)">Reset</button>
+
 		<script>
 			initTimer(this)
 		</script>
 	</gui-timer>
-`;
+</template>
 
+<script>
 function initTimer(guiTimer) {
 	addAttributeListener(guiTimer, ['elapsed-time', 'max-time'], () => {
 		const elapsedTime = parseFloat(guiTimer.getAttribute('elapsed-time'));
@@ -40,3 +40,4 @@ function resetTimer(event) {
 	const guiTimer = event.target.getRootNode().host;
 	guiTimer.setAttribute('elapsed-time', 0);
 }
+</script>

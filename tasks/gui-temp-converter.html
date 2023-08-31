@@ -1,19 +1,19 @@
-define`
+<template is="component-definition">
 	<gui-temp-converter celsius="" fahrenheit="">
 		<link href="./component.css" rel="stylesheet" />
-		<fieldset>
-			<legend>Temperature Converter</legend>
-			<input unit="celsius" oninput="updateRootAttr('celsius', event)" value=${'celsius'}>
-			Celsius =
-			<input unit="fahrenheit" oninput="updateRootAttr('fahrenheit', event)" value=${'fahrenheit'}>
-			Fahrenheit
-		</fieldset>
+
+		<input unit="celsius" oninput="updateRootAttr('celsius', event)" value=${'celsius'}>
+		Celsius =
+		<input unit="fahrenheit" oninput="updateRootAttr('fahrenheit', event)" value=${'fahrenheit'}>
+		Fahrenheit
+
 		<script>
-			addAttributeListener(this, ['celsius', 'fahrenheit], convertTemperature)
+			addAttributeListener(this, ['celsius', 'fahrenheit'], convertTemperature);
 		</script>
 	</gui-temp-converter>
-`;
+</template>
 
+<script>
 /**
  * on updating any temperature attribute, convert to the other unit and update
  */
@@ -46,3 +46,4 @@ function convertTemperature(updatedAttributeRecord) {
 		tempConverter.setAttribute('celsius', newCelsius);
 	}
 }
+</script>

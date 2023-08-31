@@ -1,8 +1,8 @@
-define`
+<template is="component-definition">
 	<gui-crud>
 		<link href="./component.css" rel="stylesheet" />
 		<style>
-			fieldset {
+			section {
 				display: grid;
 				gap: 4px;
 				grid-template-areas:
@@ -16,8 +16,8 @@ define`
 			#name-form { grid-area: form; }
 			#controls { grid-area: controls; }
 		</style>
-		<fieldset>
-			<legend>CRUD</legend>
+
+		<section>
 			<label id="filter">Filter prefix: <input oninput="filterOptions(event)"></label>
 
 			<select id="contact-list" size="5">
@@ -36,10 +36,12 @@ define`
 				<button onclick="updateRecord(event)">Update</button>
 				<button onclick="deleteRecord(event)">Delete</button>
 			</div>
-		</fieldset>
-	</gui-crud>
-`;
+		</section>
 
+	</gui-crud>
+</template>
+
+<script>
 function filterOptions(event) {
 	const filterString = event.target.value;
 
@@ -91,3 +93,4 @@ function deleteRecord(event) {
 
 	selectedOption.remove();
 }
+</script>

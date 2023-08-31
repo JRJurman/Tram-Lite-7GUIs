@@ -1,4 +1,4 @@
-define`
+<template is="component-definition">
 	<gui-circle-drawer count="0" vwidth="300" vheight="150">
 		<link href="./component.css" rel="stylesheet" />
 		<style>
@@ -23,37 +23,37 @@ define`
 				margin-bottom: 4px;
 			}
 		</style>
-		<fieldset>
-			<legend>Circle Drawer</legend>
-			<context-menu-container matches="circle">
-				<span slot="menu-options">
-					<button onclick="openAdjustFrame(event)">Adjust diameter...</button>
-				</span>
-				<span slot="content">
-					<div id="controls">
-						<button onclick="undoCircleStack(event)">Undo</button>
-						<button onclick="redoCircleStack(event)">Redo</button>
-					</div>
-					<svg viewbox="0 0 ${'vwidth'} ${'vheight'}" xmlns="http://www.w3.org/2000/svg">
-						<circle cx="50" cy="50" r="20" />
-						<circle cx="200" cy="75" r="30" />
-					</svg>
-					<dialog id="adjust-frame">
-						<label> Adjust Circle Diameter <br/>
-							<input type="range" min="10" step="5" max="100" oninput="updateTargetDiameter(event)">
-						</label>
-						<button onclick="applyAdjustedDiameter(event)">Apply</button>
-					</dialog>
-				</span>
-			</context-menu-container>
-		</fieldset>
+
+		<context-menu-container matches="circle">
+			<span slot="menu-options">
+				<button onclick="openAdjustFrame(event)">Adjust diameter...</button>
+			</span>
+			<span slot="content">
+				<div id="controls">
+					<button onclick="undoCircleStack(event)">Undo</button>
+					<button onclick="redoCircleStack(event)">Redo</button>
+				</div>
+				<svg viewbox="0 0 ${'vwidth'} ${'vheight'}" xmlns="http://www.w3.org/2000/svg">
+					<circle cx="50" cy="50" r="20" />
+					<circle cx="200" cy="75" r="30" />
+				</svg>
+				<dialog id="adjust-frame">
+					<label> Adjust Circle Diameter <br/>
+						<input type="range" min="10" step="5" max="100" oninput="updateTargetDiameter(event)">
+					</label>
+					<button onclick="applyAdjustedDiameter(event)">Apply</button>
+				</dialog>
+			</span>
+		</context-menu-container>
+
 		<script>
 			initCircleDrawerStack(this)
 			initCircleDrawerListener(this)
 		</script>
 	</gui-circle-drawer>
-`;
+</template>
 
+<script>
 function openAdjustFrame(event) {
 	const circleDrawerShadow = event.target.getRootNode();
 	const circleDrawer = circleDrawerShadow.host;
@@ -192,3 +192,4 @@ function addCircle(circleDrawer, event) {
 	circleDrawer.undoStack.push(`N ${x} ${y}`);
 	circleDrawer.redoStack = [];
 }
+</script>
