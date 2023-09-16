@@ -1,4 +1,4 @@
-<template is="component-definition">
+<template tl-definition>
 	<gui-crud>
 		<link href="./component.css" rel="stylesheet" />
 		<style>
@@ -68,7 +68,8 @@ function createRecord(event) {
 	const contactListSelect = contactListShadow.querySelector('#contact-list');
 
 	const { name, surname } = getNameAndSurname(contactListShadow);
-	const optionElement = html`<option>${surname}, ${name}</option>`;
+	const optionElement = document.createElement('option');
+	optionElement.innerText = `${surname}, ${name}`;
 	contactListSelect.appendChild(optionElement);
 }
 

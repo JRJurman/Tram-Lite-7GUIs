@@ -1,33 +1,27 @@
-<template is="component-definition">
+<template tl-definition>
 	<gui-timer elapsed-time="0" max-time="0">
 		<link href="./component.css" rel="stylesheet" />
 
-		Elapsed Time <progress value=${'elapsed-time'} max=${'max-time'}></progress>
+		Elapsed Time <progress value="${'elapsed-time'}" max="${'max-time'}"></progress>
 		<div>${'elapsed-time'}s</div>
-		Duration <input oninput="updateRootAttr('max-time', event)" type="range" min="0" max="30" step="0.01" value=${'max-time'}>
+		Duration <input tl-controlled tl-trigger="input" tl-hostattr="max-time" type="range" min="0" max="30" step="0.01">
 		<button onclick="resetTimer(event)">Reset</button>
 
-		<script>
-			initTimer(this)
+		<script tl-effect tl-dependencies="elapsed-time max-time">
+			const elapsedTime = parseFloat(this.getAttribute('elapsed-time'));
+			const maxTime = parseFloat(this.getAttribute('max-time'));
+			const timerId = this.getAttribute('timer-id');
+			if (!timerId && elapsedTime < maxTime) {
+				startTimer(this);
+			} else if (timerId && elapsedTime >= maxTime) {
+				clearInterval(timerId);
+				this.removeAttribute('timer-id');
+			}
 		</script>
 	</gui-timer>
 </template>
 
 <script>
-function initTimer(guiTimer) {
-	addAttributeListener(guiTimer, ['elapsed-time', 'max-time'], () => {
-		const elapsedTime = parseFloat(guiTimer.getAttribute('elapsed-time'));
-		const maxTime = parseFloat(guiTimer.getAttribute('max-time'));
-		const timerId = guiTimer.getAttribute('timer-id');
-		if (!timerId && elapsedTime < maxTime) {
-			startTimer(guiTimer);
-		} else if (timerId && elapsedTime >= maxTime) {
-			clearInterval(timerId);
-			guiTimer.removeAttribute('timer-id');
-		}
-	});
-}
-
 function startTimer(guiTimer) {
 	const timerId = setInterval(() => {
 		const elapsedTime = parseFloat(guiTimer.getAttribute('elapsed-time'));

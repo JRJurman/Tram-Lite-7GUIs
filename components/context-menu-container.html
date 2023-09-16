@@ -1,4 +1,4 @@
-<template is="component-definition">
+<template tl-definition>
 	<context-menu-container matches="">
 		<style>
 			menu {
@@ -14,7 +14,7 @@
 				<slot name="content"></slot>
 			</section>
 		</section>
-		<script>
+		<script tl-effect>
 			this.dismissContextMenu = () => dismissContextMenu(this.shadowRoot.querySelector('menu'))
 		</script>
 	</context-menu-container>

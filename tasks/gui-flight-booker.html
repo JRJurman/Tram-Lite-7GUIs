@@ -1,4 +1,4 @@
-<template is="component-definition">
+<template tl-definition>
 	<gui-flight-booker flight-option="one-way" start-date="03/27/2014" return-date="03/27/2014">
 		<link href="./component.css" rel="stylesheet" />
 		<style>
@@ -14,30 +14,22 @@
 		</style>
 
 		<section>
-			<select id="flight-input" onchange="updateRootAttr('flight-option', event)" value=${'flight-option'}>
+			<select id="flight-input" tl-controlled tl-hostattr="flight-option">
 				<option value="one-way">one-way flight</option>
 				<option value="return">return flight</option>
 			</select>
-			<input id="start-input" oninput="updateRootAttr('start-date', event)" value=${'start-date'}>
-			<input id="return-input" oninput="updateRootAttr('return-date', event)" value=${'return-date'}>
+			<input id="start-input" tl-controlled tl-hostattr="start-date" tl-trigger="input">
+			<input id="return-input" tl-controlled tl-hostattr="return-date" tl-trigger="input">
 			<button id="book-confirm" onclick="bookFlight(this)">Book</button>
 		</section>
 
-		<script>
-			initFlightBooker(this)
+		<script tl-effect tl-dependencies="flight-option start-date return-date">
+			decorateFlightBookerControls(this)
 		</script>
 	</gui-flight-booker>
 </template>
 
 <script>
-function initFlightBooker(flightBooker) {
-	// setup listeners
-	addAttributeListener(flightBooker, ['flight-option', 'start-date', 'return-date'], () =>
-		decorateFlightBookerControls(flightBooker)
-	);
-	decorateFlightBookerControls(flightBooker);
-}
-
 function decorateFlightBookerControls(flightBooker) {
 	// attributes from the root component
 	const flightOption = flightBooker.getAttribute('flight-option');

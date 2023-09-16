@@ -1,4 +1,4 @@
-<template is="component-definition">
+<template tl-definition>
 	<gui-circle-drawer count="0" vwidth="300" vheight="150">
 		<link href="./component.css" rel="stylesheet" />
 		<style>
@@ -46,7 +46,7 @@
 			</span>
 		</context-menu-container>
 
-		<script>
+		<script tl-effect>
 			initCircleDrawerStack(this)
 			initCircleDrawerListener(this)
 		</script>
@@ -155,7 +155,10 @@ function redoCircleStack(event) {
 		if (lastItem[0] === 'N') {
 			const [action, x, y] = lastItem.split(' ');
 			const circleSvgContainer = circleDrawerShadow.querySelector('svg');
-			const newCircle = svg`<circle cx="${x}" cy="${y}" r="10" />`;
+			const newCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+			newCircle.setAttribute("cx", x);
+			newCircle.setAttribute("cy", y);
+			newCircle.setAttribute("r", 10);
 			circleSvgContainer.appendChild(newCircle);
 		}
 
@@ -186,7 +189,10 @@ function addCircle(circleDrawer, event) {
 	const x = (event.clientX - containerRect.left) * xScale;
 	const y = (event.clientY - containerRect.top) * yScale;
 
-	const newCircle = svg`<circle cx="${x}" cy="${y}" r="10" />`;
+	const newCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+	newCircle.setAttribute("cx", x);
+	newCircle.setAttribute("cy", y);
+	newCircle.setAttribute("r", 10);
 	circleSvgContainer.appendChild(newCircle);
 
 	circleDrawer.undoStack.push(`N ${x} ${y}`);

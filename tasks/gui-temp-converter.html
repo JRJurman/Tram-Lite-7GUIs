@@ -1,49 +1,49 @@
-<template is="component-definition">
+<template tl-definition>
 	<gui-temp-converter celsius="" fahrenheit="">
 		<link href="./component.css" rel="stylesheet" />
 
-		<input unit="celsius" oninput="updateRootAttr('celsius', event)" value=${'celsius'}>
-		Celsius =
-		<input unit="fahrenheit" oninput="updateRootAttr('fahrenheit', event)" value=${'fahrenheit'}>
-		Fahrenheit
+		<label>
+			<input tl-controlled unit="celsius" tl-hostattr="celsius" tl-trigger="input">
+			Celsius
+		</label> =
+		<label>
+			<input tl-controlled unit="fahrenheit" tl-hostattr="fahrenheit" tl-trigger="input">
+			Fahrenheit
+		</label>
 
-		<script>
-			addAttributeListener(this, ['celsius', 'fahrenheit'], convertTemperature);
+		<script tl-effect tl-dependencies="celsius">
+			const c = this.getAttribute('celsius');
+			const newF = calcFahrenheit(c);
+			if (c && !isNaN(newF) && !isReflectiveUpdate(this)) {
+				this.setAttribute('fahrenheit', newF);
+			}
+		</script>
+		<script tl-effect tl-dependencies="fahrenheit">
+			const f = this.getAttribute('fahrenheit');
+			const newC = calcCelsius(f);
+			if (f && !isNaN(newC)) {
+				this.setAttribute('celsius', newC);
+			}
 		</script>
 	</gui-temp-converter>
 </template>
 
 <script>
-/**
- * on updating any temperature attribute, convert to the other unit and update
- */
-function convertTemperature(updatedAttributeRecord) {
-	const tempConverter = updatedAttributeRecord.target;
-	const updatedAttribute = updatedAttributeRecord.attributeName;
-	const activeUnit = tempConverter.shadowRoot.activeElement.getAttribute('unit');
-
-	const isInvalid = isNaN(parseInt(tempConverter.getAttribute(updatedAttribute)));
-	if (isInvalid) {
-		return;
+	function calcCelsius(f) {
+		return ((f - 32) * (5 / 9)).toFixed(0);
 	}
 
-	// if the attribute we've updated isn't the one that is selected
-	// then we'll end up updating the input we are currently in, which we should avoid
-	if (updatedAttribute !== activeUnit) {
-		return;
+	function calcFahrenheit(c) {
+		return (c * (9 / 5) + 32).toFixed(0);
 	}
 
-	const currentCelsius = parseInt(tempConverter.getAttribute('celsius'));
-	const currentFahrenheit = parseInt(tempConverter.getAttribute('fahrenheit'));
-
-	if (updatedAttribute === 'celsius') {
-		const newFahrenheit = (currentCelsius * (9 / 5) + 32).toFixed(0);
-		tempConverter.setAttribute('fahrenheit', newFahrenheit);
+	function isReflectiveUpdate(temperatureConverter) {
+		const f = temperatureConverter.getAttribute('fahrenheit');
+		const c = temperatureConverter.getAttribute('celsius');
+		// if this celsius or fahrenheit value would generate the other, don't update
+		// this is indicative of an update triggered by another update!
+		// this can happen because multiple Fahrenheit values map to the same (truncated) celsius value
+		// e.g. 19F and 20F both map to -7C
+		return calcFahrenheit(calcCelsius(f)) === calcFahrenheit(c);
 	}
-
-	if (updatedAttribute === 'fahrenheit') {
-		const newCelsius = ((currentFahrenheit - 32) * (5 / 9)).toFixed(0);
-		tempConverter.setAttribute('celsius', newCelsius);
-	}
-}
 </script>

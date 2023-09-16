@@ -2,3 +2,7 @@ button, input, select, option {
 	font-family: 'Poppins', sans-serif;
 	font-weight: 200;
 }
+
+input {
+	border: solid 1px;
+}
