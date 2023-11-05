@@ -1,58 +1,53 @@
-<template tl-definition>
-	<context-menu-container matches="">
-		<style>
-			menu {
-				display: none;
-				position: absolute;
-			}
-		</style>
-		<menu>
-			<slot name="menu-options"></slot>
-		</menu>
-		<section oncontextmenu="displayContextMenu(this, event)" onclick="dismissContextMenu(this, event)">
-			<section id="content-wrapper">
-				<slot name="content"></slot>
-			</section>
+<context-menu-container matches="">
+	<style>
+		menu {
+			display: none;
+			position: absolute;
+		}
+	</style>
+	<menu>
+		<slot name="menu-options"></slot>
+	</menu>
+	<section id="top-section">
+		<section id="content-wrapper">
+			<slot name="content"></slot>
 		</section>
-		<script tl-effect>
-			this.dismissContextMenu = () => dismissContextMenu(this.shadowRoot.querySelector('menu'))
-		</script>
-	</context-menu-container>
-</template>
+	</section>
+	<script tl-effect>
+		const topSection = this.shadowRoot.querySelector('section#top-section');
+		topSection.addEventListener('contextmenu', (event) => {
+			// check if the target element matches what is required in the host (if we have matches)
+			const matches = this.getAttribute('matches');
+			const elementMatches = event.target.matches(matches);
+			if ((matches && elementMatches) || !matches) {
+				event.preventDefault();
+			} else {
+				return;
+			}
 
-<script>
-function displayContextMenu(contextMenuSection, event) {
-	const contextMenuShadow = contextMenuSection.getRootNode();
-	const contextMenuContainer = contextMenuShadow.host;
+			// set the target on the context menu container
+			this.target = event.target;
 
-	// check if the target element matches what is required in the host (if we have matches)
-	const matches = contextMenuContainer.getAttribute('matches');
-	const elementMatches = event.target.matches(matches);
-	if ((matches && elementMatches) || !matches) {
-		event.preventDefault();
-	} else {
-		return;
-	}
+			// display the context menu
+			const contextMenuMenu = this.shadowRoot.querySelector('menu');
+			contextMenuMenu.style.display = 'block';
+			contextMenuMenu.style.top = `${event.pageY - 20}px`;
+			contextMenuMenu.style.left = `${event.pageX - 35}px`;
 
-	// set the target on the context menu container
-	contextMenuContainer.target = event.target;
+			const contentWrapper = this.shadowRoot.querySelector('#content-wrapper');
+			contentWrapper.style.pointerEvents = 'none';
+		})
 
-	// display the context menu
-	const contextMenuMenu = contextMenuShadow.querySelector('menu');
-	contextMenuMenu.style.display = 'block';
-	contextMenuMenu.style.top = `${event.pageY - 20}px`;
-	contextMenuMenu.style.left = `${event.pageX - 35}px`;
+		this.dismissContextMenu = () => {
+			const contextMenuMenu = this.shadowRoot.querySelector('menu');
+			const contentWrapper = this.shadowRoot.querySelector('#content-wrapper');
 
-	const contentWrapper = contextMenuShadow.querySelector('#content-wrapper');
-	contentWrapper.style.pointerEvents = 'none';
-}
+			contextMenuMenu.style.display = 'none';
+			contentWrapper.style.pointerEvents = '';
+		}
 
-function dismissContextMenu(contextMenuSection, event) {
-	const contextMenuShadow = contextMenuSection.getRootNode();
-	const contextMenuMenu = contextMenuShadow.querySelector('menu');
-	const contentWrapper = contextMenuShadow.querySelector('#content-wrapper');
-
-	contextMenuMenu.style.display = 'none';
-	contentWrapper.style.pointerEvents = '';
-}
-</script>
+		topSection.addEventListener('click', () => {
+			this.dismissContextMenu()
+		})
+	</script>
+</context-menu-container>

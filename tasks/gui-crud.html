@@ -1,97 +1,89 @@
-<template tl-definition>
-	<gui-crud>
-		<link href="./component.css" rel="stylesheet" />
-		<style>
-			section {
-				display: grid;
-				gap: 4px;
-				grid-template-areas:
-					"filter   ."
-					"contacts form"
-					"controls controls";
-			}
+<gui-crud>
+	<link href="./component.css" rel="stylesheet" />
+	<style>
+		section {
+			display: grid;
+			gap: 4px;
+			grid-template-areas:
+				"filter   ."
+				"contacts form"
+				"controls controls";
+		}
 
-			#filter { grid-area: filter; }
-			#contact-list { grid-area: contacts; }
-			#name-form { grid-area: form; }
-			#controls { grid-area: controls; }
-		</style>
+		#filter { grid-area: filter; }
+		#contact-list { grid-area: contacts; }
+		#name-form { grid-area: form; }
+		#controls { grid-area: controls; }
+	</style>
 
-		<section>
-			<label id="filter">Filter prefix: <input oninput="filterOptions(event)"></label>
+	<section>
+		<label id="filter">Filter prefix: <input tl-controlled tl-attrmap="value:filter" tl-trigger="input"></label>
 
-			<select id="contact-list" size="5">
-				<option>Emil, Hans</option>
-				<option>Mustermann, Max</option>
-				<option>Tisch, Roman</option>
-			</select>
+		<select id="contact-list" size="5">
+			<option>Emil, Hans</option>
+			<option>Mustermann, Max</option>
+			<option>Tisch, Roman</option>
+		</select>
 
-			<div id="name-form">
-				<label>Name: <input id="name-input"></label>
-				<label>Surname: <input id="surname-input"></label>
-			</div>
+		<div id="name-form">
+			<label>Name: <input id="name-input"></label>
+			<label>Surname: <input id="surname-input"></label>
+		</div>
 
-			<div id="controls">
-				<button onclick="createRecord(event)">Create</button>
-				<button onclick="updateRecord(event)">Update</button>
-				<button onclick="deleteRecord(event)">Delete</button>
-			</div>
-		</section>
+		<div id="controls">
+			<button id="create">Create</button>
+			<button id="update">Update</button>
+			<button id="delete">Delete</button>
+		</div>
+	</section>
 
-	</gui-crud>
-</template>
+	<script tl-effect tl-dependencies="filter">
+		const filterString = this.getAttribute('filter') || '';
 
-<script>
-function filterOptions(event) {
-	const filterString = event.target.value;
+		// get contact list options
+		const contactListOptions = this.shadowRoot.querySelectorAll('option');
 
-	// get contact list options
-	const contactListShadow = event.target.getRootNode();
-	const contactListSelect = contactListShadow.querySelector('#contact-list');
-	const contactListOptions = contactListSelect.querySelectorAll('option');
+		// update the display style attribute (which hides options)
+		[...contactListOptions].forEach((option) => {
+			const shouldHide = !option.textContent.toLowerCase().startsWith(filterString.toLowerCase());
+			option.style.display = shouldHide ? 'none' : '';
+		});
+	</script>
 
-	// update the display style attribute (which hides options)
-	[...contactListOptions].forEach((option) => {
-		const shouldHide = !option.textContent.startsWith(filterString);
-		option.style.display = shouldHide ? 'none' : '';
-	});
-}
+	<script tl-effect>
+		const getNameAndSurname = () => {
+			const name = this.shadowRoot.querySelector('#name-input').value;
+			const surname = this.shadowRoot.querySelector('#surname-input').value;
+			return { name, surname };
+		}
 
-function getNameAndSurname(contactListShadow) {
-	const name = contactListShadow.querySelector('#name-input').value;
-	const surname = contactListShadow.querySelector('#surname-input').value;
-	return { name, surname };
-}
+		const createButton = this.shadowRoot.querySelector('button#create');
+		createButton.addEventListener('click', () => {
+			const contactListSelect = this.shadowRoot.querySelector('#contact-list');
+			const { name, surname } = getNameAndSurname();
+			const optionElement = this.ownerDocument.createElement('option');
+			optionElement.innerText = `${surname}, ${name}`;
+			contactListSelect.appendChild(optionElement);
+		})
 
-function createRecord(event) {
-	const contactListShadow = event.target.getRootNode();
-	const contactListSelect = contactListShadow.querySelector('#contact-list');
+		const updateButton = this.shadowRoot.querySelector('button#update');
+		updateButton.addEventListener('click', () => {
+			const contactListSelect = this.shadowRoot.querySelector('#contact-list');
+			const contactListOptions = this.shadowRoot.querySelectorAll('option');
+			const selectedOption = contactListOptions[contactListSelect.selectedIndex];
 
-	const { name, surname } = getNameAndSurname(contactListShadow);
-	const optionElement = document.createElement('option');
-	optionElement.innerText = `${surname}, ${name}`;
-	contactListSelect.appendChild(optionElement);
-}
+			const { name, surname } = getNameAndSurname();
+			const updatedText = `${surname}, ${name}`;
+			selectedOption.textContent = updatedText;
+		})
 
-function updateRecord(event) {
-	const contactListShadow = event.target.getRootNode();
-	const contactListSelect = contactListShadow.querySelector('#contact-list');
-	const contactListOptions = contactListSelect.querySelectorAll('option');
+		const deleteButton = this.shadowRoot.querySelector('button#delete');
+		deleteButton.addEventListener('click', () => {
+			const contactListSelect = this.shadowRoot.querySelector('#contact-list');
+			const contactListOptions = this.shadowRoot.querySelectorAll('option');
+			const selectedOption = contactListOptions[contactListSelect.selectedIndex];
 
-	const selectedOption = contactListOptions[contactListSelect.selectedIndex];
-
-	const { name, surname } = getNameAndSurname(contactListShadow);
-	const updatedText = `${surname}, ${name}`;
-	selectedOption.textContent = updatedText;
-}
-
-function deleteRecord(event) {
-	const contactListShadow = event.target.getRootNode();
-	const contactListSelect = contactListShadow.querySelector('#contact-list');
-	const contactListOptions = contactListSelect.querySelectorAll('option');
-
-	const selectedOption = contactListOptions[contactListSelect.selectedIndex];
-
-	selectedOption.remove();
-}
-</script>
+			selectedOption.remove();
+		})
+	</script>
+</gui-crud>

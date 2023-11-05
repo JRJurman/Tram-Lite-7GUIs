@@ -1,33 +1,31 @@
-<template tl-definition>
-	<example-frame>
-		<style>
-			fieldset {
-				border: yellow 1px solid;
-			}
-			legend {
-				color: yellow;
-				font-weight: 400;
+<example-frame>
+	<style>
+		fieldset {
+			border: yellow 1px solid;
+		}
+		legend {
+			color: yellow;
+			font-weight: 400;
 
-				display: flex;
-				gap: 0.8em;
-				padding-top: 0.5em;
-				padding-left: 0.5em;
-				padding-right: 0.5em;
-			}
+			display: flex;
+			gap: 0.8em;
+			padding-top: 0.5em;
+			padding-left: 0.5em;
+			padding-right: 0.5em;
+		}
 
-			button {
-				border: none;
-				background: inherit;
-				color: inherit;
-				cursor: pointer;
-			}
-		</style>
-		<fieldset>
-			<legend>
-				${'name'}
-				<a href="https://github.com/JRJurman/Tram-Lite-7GUIs/blob/main/${'source'}"><material-icon icon="code_blocks" onclick="setCodeBlock(event)"></material-icon></a>
-			</legend>
-			<slot></slot>
-		</fieldset>
-	</example-frame>
-</template>
+		button {
+			border: none;
+			background: inherit;
+			color: inherit;
+			cursor: pointer;
+		}
+	</style>
+	<fieldset>
+		<legend>
+			${'name'}
+			<a href="https://github.com/JRJurman/Tram-Lite-7GUIs/blob/main/${'source'}"><material-icon icon="code_blocks" onclick="setCodeBlock(event)"></material-icon></a>
+		</legend>
+		<slot></slot>
+	</fieldset>
+</example-frame>

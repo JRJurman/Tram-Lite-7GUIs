@@ -1,4 +1,3 @@
-<template tl-definition>
 	<gui-flight-booker flight-option="one-way" start-date="03/27/2014" return-date="03/27/2014">
 		<link href="./component.css" rel="stylesheet" />
 		<style>
@@ -14,81 +13,76 @@
 		</style>
 
 		<section>
-			<select id="flight-input" tl-controlled tl-hostattr="flight-option">
+			<select id="flight-input" tl-controlled tl-attrmap="value:flight-option">
 				<option value="one-way">one-way flight</option>
 				<option value="return">return flight</option>
 			</select>
-			<input id="start-input" tl-controlled tl-hostattr="start-date" tl-trigger="input">
-			<input id="return-input" tl-controlled tl-hostattr="return-date" tl-trigger="input">
+			<input id="start-input" tl-controlled tl-attrmap="value:start-date" tl-trigger="input">
+			<input id="return-input" tl-controlled tl-attrmap="value:return-date" tl-trigger="input">
 			<button id="book-confirm" onclick="bookFlight(this)">Book</button>
 		</section>
 
+		<script tl-effect>
+			const confirmButton = this.shadowRoot.querySelector('button')
+			confirmButton.addEventListener('click', () => {
+				const flightOption = this.getAttribute('flight-option');
+				if (flightOption === 'one-way') {
+					alert(`You have booked a one-way flight on ${this.getAttribute('start-date')}.`);
+				}
+				if (flightOption === 'return') {
+					alert(
+						`You have booked a return flight from ${this.getAttribute('start-date')} to ${this.getAttribute(
+							'return-date'
+						)}.`
+					);
+				}
+			});
+		</script>
+
 		<script tl-effect tl-dependencies="flight-option start-date return-date">
-			decorateFlightBookerControls(this)
+			// attributes from the root component
+			const flightOption = this.getAttribute('flight-option');
+			const startDate = this.getAttribute('start-date');
+			const returnDate = this.getAttribute('return-date');
+
+			// startDate and returnDate values as time, used to check for validity
+			const startDateTime = new Date(startDate).getTime();
+			const returnDateTIme = new Date(returnDate).getTime();
+
+			// elements we may need to decorate or disable
+			const startInput = this.shadowRoot.querySelector('#start-input');
+			const returnInput = this.shadowRoot.querySelector('#return-input');
+			const bookConfirm = this.shadowRoot.querySelector('#book-confirm');
+
+			// if one-way flight is selected, disable the return date
+			if (flightOption === 'one-way') {
+				this.setAttribute('return-date', startDate);
+				returnInput.setAttribute('disabled', '');
+			} else {
+				returnInput.removeAttribute('disabled');
+			}
+
+			// if either date is improperly formatted, mark the input to be styled
+			const isStartInvalid = isNaN(startDateTime);
+			if (isStartInvalid) {
+				startInput.setAttribute('invalid', '');
+			} else {
+				startInput.removeAttribute('invalid');
+			}
+
+			const isReturnInvalid = isNaN(returnDateTIme);
+			if (isReturnInvalid) {
+				returnInput.setAttribute('invalid', '');
+			} else {
+				returnInput.removeAttribute('invalid');
+			}
+
+			// if either date is invalid, or the startDate is after the return, disable booking
+			const isStartAfterReturn = startDateTime > returnDateTIme;
+			if (isStartInvalid || isReturnInvalid || isStartAfterReturn) {
+				bookConfirm.setAttribute('disabled', '');
+			} else {
+				bookConfirm.removeAttribute('disabled');
+			}
 		</script>
 	</gui-flight-booker>
-</template>
-
-<script>
-function decorateFlightBookerControls(flightBooker) {
-	// attributes from the root component
-	const flightOption = flightBooker.getAttribute('flight-option');
-	const startDate = flightBooker.getAttribute('start-date');
-	const returnDate = flightBooker.getAttribute('return-date');
-
-	// startDate and returnDate values as time, used to check for validity
-	const startDateTime = new Date(startDate).getTime();
-	const returnDateTIme = new Date(returnDate).getTime();
-
-	// elements we may need to decorate or disable
-	const startInput = flightBooker.shadowRoot.querySelector('#start-input');
-	const returnInput = flightBooker.shadowRoot.querySelector('#return-input');
-	const bookConfirm = flightBooker.shadowRoot.querySelector('#book-confirm');
-
-	// if one-way flight is selected, disable the return date
-	if (flightOption === 'one-way') {
-		flightBooker.setAttribute('return-date', startDate);
-		returnInput.setAttribute('disabled', '');
-	} else {
-		returnInput.removeAttribute('disabled');
-	}
-
-	// if either date is improperly formatted, mark the input to be styled
-	const isStartInvalid = isNaN(startDateTime);
-	if (isStartInvalid) {
-		startInput.setAttribute('invalid', '');
-	} else {
-		startInput.removeAttribute('invalid');
-	}
-
-	const isReturnInvalid = isNaN(returnDateTIme);
-	if (isReturnInvalid) {
-		returnInput.setAttribute('invalid', '');
-	} else {
-		returnInput.removeAttribute('invalid');
-	}
-
-	// if either date is invalid, or the startDate is after the return, disable booking
-	const isStartAfterReturn = startDateTime > returnDateTIme;
-	if (isStartInvalid || isReturnInvalid || isStartAfterReturn) {
-		bookConfirm.setAttribute('disabled', '');
-	} else {
-		bookConfirm.removeAttribute('disabled');
-	}
-}
-
-function bookFlight(flightButton) {
-	const flightBooker = flightButton.getRootNode().host;
-	const flightOption = flightBooker.getAttribute('flight-option');
-	if (flightOption === 'one-way') {
-		alert(`You have booked a one-way flight on ${flightBooker.getAttribute('start-date')}.`);
-	}
-	if (flightOption === 'return') {
-		alert(
-			`You have booked a return flight from ${flightBooker.getAttribute('start-date')} to ${flightBooker.getAttribute(
-				'return-date'
-			)}.`
-		);
-	}
-}
-</script>

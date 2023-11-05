@@ -1,37 +1,35 @@
-<template tl-definition>
-	<gui-timer elapsed-time="0" max-time="0">
-		<link href="./component.css" rel="stylesheet" />
+<gui-timer elapsed-time="0" max-time="0">
+	<link href="./component.css" rel="stylesheet" />
 
-		Elapsed Time <progress value="${'elapsed-time'}" max="${'max-time'}"></progress>
-		<div>${'elapsed-time'}s</div>
-		Duration <input tl-controlled tl-trigger="input" tl-hostattr="max-time" type="range" min="0" max="30" step="0.01">
-		<button onclick="resetTimer(event)">Reset</button>
+	Elapsed Time <progress value="${'elapsed-time'}" max="${'max-time'}"></progress>
+	<div>${'elapsed-time'}s</div>
+	Duration <input tl-controlled tl-trigger="input" tl-attrmap="value:max-time" type="range" min="0" max="30" step="0.01">
+	<button>Reset</button>
 
-		<script tl-effect tl-dependencies="elapsed-time max-time">
-			const elapsedTime = parseFloat(this.getAttribute('elapsed-time'));
-			const maxTime = parseFloat(this.getAttribute('max-time'));
-			const timerId = this.getAttribute('timer-id');
-			if (!timerId && elapsedTime < maxTime) {
-				startTimer(this);
-			} else if (timerId && elapsedTime >= maxTime) {
-				clearInterval(timerId);
-				this.removeAttribute('timer-id');
-			}
-		</script>
-	</gui-timer>
-</template>
+	<script tl-effect>
+		this.startTimer = () => {
+			const timerId = setInterval(() => {
+				const elapsedTime = parseFloat(this.getAttribute('elapsed-time'));
+				this.setAttribute('elapsed-time', (elapsedTime + 0.1).toFixed(1));
+			}, 100);
+			this.setAttribute('timer-id', timerId);
+		}
 
-<script>
-function startTimer(guiTimer) {
-	const timerId = setInterval(() => {
-		const elapsedTime = parseFloat(guiTimer.getAttribute('elapsed-time'));
-		guiTimer.setAttribute('elapsed-time', (elapsedTime + 0.1).toFixed(1));
-	}, 100);
-	guiTimer.setAttribute('timer-id', timerId);
-}
+		const resetButton = this.shadowRoot.querySelector('button')
+		resetButton.addEventListener('click', () => {
+			this.setAttribute('elapsed-time', 0);
+		})
+	</script>
 
-function resetTimer(event) {
-	const guiTimer = event.target.getRootNode().host;
-	guiTimer.setAttribute('elapsed-time', 0);
-}
-</script>
+	<script tl-effect tl-dependencies="elapsed-time max-time">
+		const elapsedTime = parseFloat(this.getAttribute('elapsed-time'));
+		const maxTime = parseFloat(this.getAttribute('max-time'));
+		const timerId = this.getAttribute('timer-id');
+		if (!timerId && elapsedTime < maxTime) {
+			this.startTimer(this);
+		} else if (timerId && elapsedTime >= maxTime) {
+			clearInterval(timerId);
+			this.removeAttribute('timer-id');
+		}
+	</script>
+</gui-timer>
